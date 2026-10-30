@@ -5,7 +5,7 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
-## [0.1.0] - unreleased
+## [0.1.0] - 2026-10-30
 
 ### Added
 
@@ -15,3 +15,5 @@ each release from the Conventional Commits: do not edit it by hand.
 - **widgets:** the last test of a pool, each parameter colored by its ideal range, with a Refresh button; the history of one parameter over 30, 90 or 365 days with its ideal range
 - **configuration:** API token with a guide, reading interval, test reminder delay, language, "Test the connection" and "Diagnostic" buttons
 - **i18n:** English, French, German and Spanish for the manifest, the runtime texts, the documentation and the README
+
+[0.1.0]: https://github.com/William-De71/gladys-pool-lab/releases/tag/v0.1.0
