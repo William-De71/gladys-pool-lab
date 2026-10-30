@@ -1,0 +1,15 @@
+Gladys Pool Lab integration
+Copyright 2026 William Deren
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It reads the water tests of the user's own LabCom account (the cloud of the
+Water-i.d. PoolLab 1.0 / 2.0 and PrimeLab photometers) through the official
+LabCom GraphQL API (https://backend.labcom.cloud/graphql), with a personal API
+token created by the user on labcom.cloud. This integration is not affiliated
+with nor endorsed by Water-i.d. GmbH. The query follows the published GraphQL
+schema; the field names were compared with the Home Assistant client
+"python_poollab" (https://github.com/dala318/python_poollab, MIT) and the
+ioBroker adapter "ioBroker.labcom" (https://github.com/100prznt/ioBroker.labcom,
+MIT). No code and no test data are taken from either: test/fixtures/cloud.json
+is a made-up account.

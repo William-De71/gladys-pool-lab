@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="534" viewBox="0 0 800 534">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b3a5c"/>
+      <stop offset="1" stop-color="#0f5f86"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3cc3e6"/>
+      <stop offset="1" stop-color="#1689b8"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f4f7fa"/>
+      <stop offset="1" stop-color="#cfd9e2"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="534" fill="url(#sky)"/>
+  <!-- the pool -->
+  <rect x="0" y="330" width="800" height="204" fill="url(#water)"/>
+  <rect x="0" y="318" width="800" height="16" fill="#e8eef3"/>
+  <g fill="none" stroke="#bdeeff" stroke-width="5" stroke-linecap="round" opacity="0.7">
+    <path d="M40 390 q30 -14 60 0 t60 0 t60 0"/>
+    <path d="M300 440 q30 -14 60 0 t60 0 t60 0"/>
+    <path d="M560 400 q30 -14 60 0 t60 0 t60 0"/>
+    <path d="M90 480 q30 -14 60 0 t60 0"/>
+    <path d="M620 488 q30 -14 60 0 t60 0"/>
+  </g>
+  <!-- the photometer -->
+  <g transform="translate(520 92)">
+    <rect x="0" y="0" width="170" height="300" rx="34" fill="url(#body)" stroke="#8aa3b8" stroke-width="4"/>
+    <rect x="22" y="28" width="126" height="92" rx="10" fill="#14324a"/>
+    <text x="85" y="72" font-family="DejaVu Sans Mono, monospace" font-size="34" font-weight="bold" fill="#7ef0a6" text-anchor="middle">7.32</text>
+    <text x="85" y="104" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#9fc6dd" text-anchor="middle">pH</text>
+    <circle cx="85" cy="190" r="34" fill="#2a4d66"/>
+    <circle cx="85" cy="190" r="22" fill="#9fe3f5" opacity="0.9"/>
+    <rect x="40" y="246" width="40" height="22" rx="11" fill="#0f5f86"/>
+    <rect x="90" y="246" width="40" height="22" rx="11" fill="#0f5f86"/>
+  </g>
+  <!-- a test cuvette -->
+  <g transform="translate(462 210)">
+    <rect x="0" y="0" width="44" height="120" rx="8" fill="#ffffff" opacity="0.85" stroke="#8aa3b8" stroke-width="3"/>
+    <rect x="4" y="48" width="36" height="68" rx="5" fill="#f28fb0"/>
+  </g>
+  <!-- the title -->
+  <text x="56" y="150" font-family="DejaVu Sans, sans-serif" font-size="78" font-weight="bold" fill="#ffffff">Pool Lab</text>
+  <text x="58" y="200" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#bfe6f7">for Gladys Assistant</text>
+  <g font-family="DejaVu Sans, sans-serif" font-size="22" fill="#e4f6fd">
+    <text x="58" y="250">pH · chlorine · stabilizer · alkalinity</text>
+    <text x="58" y="284">ideal ranges, scenes, widgets</text>
+  </g>
+</svg>

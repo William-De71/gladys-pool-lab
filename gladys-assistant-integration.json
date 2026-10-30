@@ -1,0 +1,2386 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Pool Lab",
+  "description": {
+    "en": "PoolLab and PrimeLab water tests from LabCom: pH, chlorine, ideal ranges, alerts.",
+    "fr": "Tests d’eau PoolLab et PrimeLab via LabCom : pH, chlore, plages idéales, alertes.",
+    "de": "PoolLab- und PrimeLab-Wassertests aus LabCom: pH, Chlor, Idealbereiche, Alarme.",
+    "es": "Análisis de agua PoolLab y PrimeLab desde LabCom: pH, cloro, rangos ideales, avisos."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-pool-lab:0.1.0",
+  "gladys_version": ">=5.3.0",
+  "categories": ["environment", "appliances"],
+  "keywords": [
+    "poollab",
+    "primelab",
+    "labcom",
+    "water-i.d.",
+    "piscine",
+    "swimming pool",
+    "spa",
+    "chlore",
+    "chlorine",
+    "analyse eau"
+  ],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-pool-lab/main/cover.jpg",
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "LabCom account",
+        "fr": "Compte LabCom",
+        "de": "LabCom-Konto",
+        "es": "Cuenta LabCom"
+      },
+      "description": {
+        "en": "Your PoolLab or PrimeLab sends its measurements to the LabCom cloud when the app synchronizes. Create a personal API token on labcom.cloud (Settings, API token) and paste it below: the integration only reads your measurements (one device per pool or spa) through the official LabCom API. Gladys never takes a measurement itself. Not affiliated with Water-i.d.",
+        "fr": "Votre PoolLab ou PrimeLab envoie ses mesures au cloud LabCom quand l’application se synchronise. Créez un jeton d’API personnel sur labcom.cloud (Paramètres, jeton d’API) et collez-le ci-dessous : l’intégration ne fait que lire vos mesures (un appareil par piscine ou spa) via l’API officielle de LabCom. Gladys ne fait jamais de mesure elle-même. Non affiliée à Water-i.d.",
+        "de": "Dein PoolLab oder PrimeLab sendet seine Messungen an die LabCom-Cloud, wenn die App synchronisiert. Erstelle auf labcom.cloud (Einstellungen, API-Token) ein persönliches API-Token und füge es unten ein: Die Integration liest deine Messungen nur (ein Gerät pro Pool oder Spa) über die offizielle LabCom-API. Gladys misst nie selbst. Nicht mit Water-i.d. verbunden.",
+        "es": "Su PoolLab o PrimeLab envía sus mediciones a la nube LabCom cuando la aplicación se sincroniza. Cree un token de API personal en labcom.cloud (Ajustes, token de API) y péguelo abajo: la integración solo lee sus mediciones (un dispositivo por piscina o spa) mediante la API oficial de LabCom. Gladys nunca mide por sí misma. No afiliada a Water-i.d."
+      },
+      "links": [
+        {
+          "url": "https://labcom.cloud/pages/user-setting",
+          "label": {
+            "en": "Create the API token",
+            "fr": "Créer le jeton d’API",
+            "de": "API-Token erstellen",
+            "es": "Crear el token de API"
+          }
+        },
+        {
+          "url": "https://labcom.cloud/",
+          "label": {
+            "en": "LabCom",
+            "fr": "LabCom",
+            "de": "LabCom",
+            "es": "LabCom"
+          }
+        }
+      ]
+    },
+    {
+      "key": "api_token",
+      "type": "secret",
+      "required": true,
+      "label": {
+        "en": "LabCom API token",
+        "fr": "Jeton d’API LabCom",
+        "de": "LabCom-API-Token",
+        "es": "Token de API de LabCom"
+      },
+      "placeholder": {
+        "en": "Paste the token created on labcom.cloud",
+        "fr": "Collez le jeton créé sur labcom.cloud",
+        "de": "Füge das auf labcom.cloud erstellte Token ein",
+        "es": "Pegue el token creado en labcom.cloud"
+      }
+    },
+    {
+      "key": "readings",
+      "type": "section",
+      "label": {
+        "en": "Readings and triggers",
+        "fr": "Lectures et déclencheurs",
+        "de": "Abfragen und Auslöser",
+        "es": "Lecturas y disparadores"
+      },
+      "description": {
+        "en": "The measurements reach LabCom only when the PoolLab app synchronizes: reading more often only shortens the delay after a synchronization. Each reading asks for the last week of measurements; the last 400 days are read again every 6 hours.",
+        "fr": "Les mesures n’arrivent dans LabCom que lorsque l’application PoolLab se synchronise : lire plus souvent ne fait que réduire le délai après une synchronisation. Chaque lecture demande la dernière semaine de mesures ; les 400 derniers jours sont relus toutes les 6 heures.",
+        "de": "Die Messungen erreichen LabCom erst, wenn die PoolLab-App synchronisiert: Häufiger abzufragen verkürzt nur die Wartezeit nach einer Synchronisierung. Jede Abfrage holt die Messungen der letzten Woche; die letzten 400 Tage werden alle 6 Stunden neu gelesen.",
+        "es": "Las mediciones llegan a LabCom solo cuando la aplicación PoolLab se sincroniza: leer más a menudo solo acorta la espera tras una sincronización. Cada lectura pide la última semana de mediciones; los últimos 400 días se vuelven a leer cada 6 horas."
+      }
+    },
+    {
+      "key": "poll_interval",
+      "type": "select",
+      "default": "15",
+      "label": {
+        "en": "Reading of LabCom",
+        "fr": "Lecture de LabCom",
+        "de": "Abfrage von LabCom",
+        "es": "Lectura de LabCom"
+      },
+      "description": {
+        "en": "How often the integration reads LabCom (one request).",
+        "fr": "Fréquence de lecture de LabCom (une seule requête).",
+        "de": "Wie oft die Integration LabCom liest (eine Anfrage).",
+        "es": "Frecuencia de lectura de LabCom (una sola petición)."
+      },
+      "options": [
+        {
+          "value": "5",
+          "label": {
+            "en": "Every 5 minutes",
+            "fr": "Toutes les 5 minutes",
+            "de": "Alle 5 Minuten",
+            "es": "Cada 5 minutos"
+          }
+        },
+        {
+          "value": "10",
+          "label": {
+            "en": "Every 10 minutes",
+            "fr": "Toutes les 10 minutes",
+            "de": "Alle 10 Minuten",
+            "es": "Cada 10 minutos"
+          }
+        },
+        {
+          "value": "15",
+          "label": {
+            "en": "Every 15 minutes",
+            "fr": "Toutes les 15 minutes",
+            "de": "Alle 15 Minuten",
+            "es": "Cada 15 minutos"
+          }
+        },
+        {
+          "value": "30",
+          "label": {
+            "en": "Every 30 minutes",
+            "fr": "Toutes les 30 minutes",
+            "de": "Alle 30 Minuten",
+            "es": "Cada 30 minutos"
+          }
+        },
+        {
+          "value": "60",
+          "label": {
+            "en": "Every hour",
+            "fr": "Toutes les heures",
+            "de": "Jede Stunde",
+            "es": "Cada hora"
+          }
+        }
+      ]
+    },
+    {
+      "key": "overdue_after",
+      "type": "select",
+      "default": "7",
+      "label": {
+        "en": "Test reminder after",
+        "fr": "Rappel de test après",
+        "de": "Test-Erinnerung nach",
+        "es": "Recordatorio de análisis tras"
+      },
+      "description": {
+        "en": "Days without a new measurement before the “water test overdue” trigger fires (in the day, between 9:00 and 21:00).",
+        "fr": "Nombre de jours sans nouvelle mesure avant que le déclencheur « test de l’eau en retard » se déclenche (en journée, entre 9 h et 21 h).",
+        "de": "Tage ohne neue Messung, bevor der Auslöser „Wassertest überfällig“ auslöst (tagsüber, zwischen 9 und 21 Uhr).",
+        "es": "Días sin una nueva medición antes de que se active el disparador «análisis del agua pendiente» (de día, entre las 9:00 y las 21:00)."
+      },
+      "options": [
+        {
+          "value": "0",
+          "label": {
+            "en": "Never",
+            "fr": "Jamais",
+            "de": "Nie",
+            "es": "Nunca"
+          }
+        },
+        {
+          "value": "3",
+          "label": {
+            "en": "3 days",
+            "fr": "3 jours",
+            "de": "3 Tage",
+            "es": "3 días"
+          }
+        },
+        {
+          "value": "7",
+          "label": {
+            "en": "7 days",
+            "fr": "7 jours",
+            "de": "7 Tage",
+            "es": "7 días"
+          }
+        },
+        {
+          "value": "14",
+          "label": {
+            "en": "14 days",
+            "fr": "14 jours",
+            "de": "14 Tage",
+            "es": "14 días"
+          }
+        },
+        {
+          "value": "30",
+          "label": {
+            "en": "30 days",
+            "fr": "30 jours",
+            "de": "30 Tage",
+            "es": "30 días"
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "default": "auto",
+      "label": {
+        "en": "Language of the texts",
+        "fr": "Langue des textes",
+        "de": "Sprache der Texte",
+        "es": "Idioma de los textos"
+      },
+      "description": {
+        "en": "Feature names, water balance, scene texts and errors. Automatic: the language of the last widget shown.",
+        "fr": "Noms des fonctionnalités, équilibre de l’eau, textes des scènes et erreurs. Automatique : la langue du dernier widget affiché.",
+        "de": "Namen der Funktionen, Wasserbalance, Szenentexte und Fehler. Automatisch: die Sprache des zuletzt angezeigten Widgets.",
+        "es": "Nombres de las funciones, equilibrio del agua, textos de escenas y errores. Automático: el idioma del último widget mostrado."
+      },
+      "options": [
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic",
+            "fr": "Automatique",
+            "de": "Automatisch",
+            "es": "Automático"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "English",
+            "de": "English",
+            "es": "English"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "Français",
+            "fr": "Français",
+            "de": "Français",
+            "es": "Français"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "Deutsch",
+            "fr": "Deutsch",
+            "de": "Deutsch",
+            "es": "Deutsch"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Español",
+            "fr": "Español",
+            "de": "Español",
+            "es": "Español"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "timeout_seconds": 60,
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "description": {
+        "en": "Reads LabCom with the token and lists the pools.",
+        "fr": "Lit LabCom avec le jeton et liste les bassins.",
+        "de": "Liest LabCom mit dem Token und listet die Becken auf.",
+        "es": "Lee LabCom con el token y enumera las piscinas."
+      }
+    },
+    {
+      "key": "diagnostic",
+      "timeout_seconds": 10,
+      "label": {
+        "en": "Diagnostic",
+        "fr": "Diagnostic",
+        "de": "Diagnose",
+        "es": "Diagnóstico"
+      },
+      "description": {
+        "en": "Writes what the integration knows to its logs (no token), for an issue.",
+        "fr": "Écrit ce que l’intégration sait dans ses journaux (sans jeton), pour un ticket.",
+        "de": "Schreibt, was die Integration weiß, in ihre Logs (ohne Token), für ein Issue.",
+        "es": "Escribe lo que sabe la integración en sus registros (sin token), para una incidencia."
+      }
+    }
+  ],
+  "widgets": [
+    {
+      "key": "pool",
+      "label": {
+        "en": "Pool water test",
+        "fr": "Test de l’eau",
+        "de": "Wassertest",
+        "es": "Análisis del agua"
+      },
+      "description": {
+        "en": "The last test of a pool: each parameter colored by its ideal range.",
+        "fr": "Le dernier test d’un bassin : chaque paramètre coloré selon sa plage idéale.",
+        "de": "Der letzte Test eines Beckens: jeder Parameter nach Idealbereich gefärbt.",
+        "es": "El último análisis de una piscina: cada parámetro coloreado según su rango ideal."
+      },
+      "icon": "droplet",
+      "action_timeout_seconds": 60,
+      "settings": [
+        {
+          "key": "pool",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "Pool",
+            "fr": "Bassin",
+            "de": "Becken",
+            "es": "Piscina"
+          },
+          "description": {
+            "en": "A Pool Lab device. Leave empty for the first pool.",
+            "fr": "Un appareil Pool Lab. Laissez vide pour le premier bassin.",
+            "de": "Ein Pool-Lab-Gerät. Leer lassen für das erste Becken.",
+            "es": "Un dispositivo Pool Lab. Déjelo vacío para la primera piscina."
+          }
+        }
+      ]
+    },
+    {
+      "key": "parameter_history",
+      "label": {
+        "en": "Pool parameter history",
+        "fr": "Historique d’un paramètre",
+        "de": "Parameterverlauf",
+        "es": "Historial de un parámetro"
+      },
+      "description": {
+        "en": "One parameter of a pool over time, with its ideal range.",
+        "fr": "Un paramètre d’un bassin dans le temps, avec sa plage idéale.",
+        "de": "Ein Parameter eines Beckens im Zeitverlauf, mit seinem Idealbereich.",
+        "es": "Un parámetro de una piscina a lo largo del tiempo, con su rango ideal."
+      },
+      "icon": "trending-up",
+      "settings": [
+        {
+          "key": "pool",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "Pool",
+            "fr": "Bassin",
+            "de": "Becken",
+            "es": "Piscina"
+          },
+          "description": {
+            "en": "A Pool Lab device. Leave empty for the first pool.",
+            "fr": "Un appareil Pool Lab. Laissez vide pour le premier bassin.",
+            "de": "Ein Pool-Lab-Gerät. Leer lassen für das erste Becken.",
+            "es": "Un dispositivo Pool Lab. Déjelo vacío para la primera piscina."
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "select",
+          "required": true,
+          "default": "ph",
+          "label": {
+            "en": "Parameter",
+            "fr": "Paramètre",
+            "de": "Parameter",
+            "es": "Parámetro"
+          },
+          "options": [
+            {
+              "value": "ph",
+              "label": {
+                "en": "pH",
+                "fr": "pH",
+                "de": "pH-Wert",
+                "es": "pH"
+              }
+            },
+            {
+              "value": "chlorine_free",
+              "label": {
+                "en": "Free chlorine",
+                "fr": "Chlore libre",
+                "de": "Freies Chlor",
+                "es": "Cloro libre"
+              }
+            },
+            {
+              "value": "chlorine_total",
+              "label": {
+                "en": "Total chlorine",
+                "fr": "Chlore total",
+                "de": "Gesamtchlor",
+                "es": "Cloro total"
+              }
+            },
+            {
+              "value": "chlorine_combined",
+              "label": {
+                "en": "Combined chlorine",
+                "fr": "Chlore combiné",
+                "de": "Gebundenes Chlor",
+                "es": "Cloro combinado"
+              }
+            },
+            {
+              "value": "bromine",
+              "label": {
+                "en": "Bromine",
+                "fr": "Brome",
+                "de": "Brom",
+                "es": "Bromo"
+              }
+            },
+            {
+              "value": "active_oxygen",
+              "label": {
+                "en": "Active oxygen",
+                "fr": "Oxygène actif",
+                "de": "Aktivsauerstoff",
+                "es": "Oxígeno activo"
+              }
+            },
+            {
+              "value": "hydrogen_peroxide",
+              "label": {
+                "en": "Hydrogen peroxide",
+                "fr": "Peroxyde d’hydrogène",
+                "de": "Wasserstoffperoxid",
+                "es": "Peróxido de hidrógeno"
+              }
+            },
+            {
+              "value": "chlorine_dioxide",
+              "label": {
+                "en": "Chlorine dioxide",
+                "fr": "Dioxyde de chlore",
+                "de": "Chlordioxid",
+                "es": "Dióxido de cloro"
+              }
+            },
+            {
+              "value": "ozone",
+              "label": {
+                "en": "Ozone",
+                "fr": "Ozone",
+                "de": "Ozon",
+                "es": "Ozono"
+              }
+            },
+            {
+              "value": "phmb",
+              "label": {
+                "en": "PHMB (biguanide)",
+                "fr": "PHMB (biguanide)",
+                "de": "PHMB (Biguanid)",
+                "es": "PHMB (biguanida)"
+              }
+            },
+            {
+              "value": "cya",
+              "label": {
+                "en": "Cyanuric acid (stabilizer)",
+                "fr": "Acide cyanurique (stabilisant)",
+                "de": "Cyanursäure (Stabilisator)",
+                "es": "Ácido cianúrico (estabilizante)"
+              }
+            },
+            {
+              "value": "alkalinity",
+              "label": {
+                "en": "Total alkalinity (TA)",
+                "fr": "Alcalinité (TAC)",
+                "de": "Gesamtalkalität (TA)",
+                "es": "Alcalinidad total (TA)"
+              }
+            },
+            {
+              "value": "calcium_hardness",
+              "label": {
+                "en": "Calcium hardness",
+                "fr": "Dureté calcique",
+                "de": "Calciumhärte",
+                "es": "Dureza cálcica"
+              }
+            },
+            {
+              "value": "total_hardness",
+              "label": {
+                "en": "Total hardness",
+                "fr": "Dureté totale (TH)",
+                "de": "Gesamthärte",
+                "es": "Dureza total"
+              }
+            },
+            {
+              "value": "salt",
+              "label": {
+                "en": "Salt",
+                "fr": "Sel",
+                "de": "Salz",
+                "es": "Sal"
+              }
+            },
+            {
+              "value": "phosphate",
+              "label": {
+                "en": "Phosphate",
+                "fr": "Phosphates",
+                "de": "Phosphat",
+                "es": "Fosfatos"
+              }
+            },
+            {
+              "value": "temperature",
+              "label": {
+                "en": "Water temperature",
+                "fr": "Température de l’eau",
+                "de": "Wassertemperatur",
+                "es": "Temperatura del agua"
+              }
+            },
+            {
+              "value": "orp",
+              "label": {
+                "en": "Redox (ORP)",
+                "fr": "Redox (ORP)",
+                "de": "Redox (ORP)",
+                "es": "Redox (ORP)"
+              }
+            },
+            {
+              "value": "other",
+              "label": {
+                "en": "Other parameter",
+                "fr": "Autre paramètre",
+                "de": "Anderer Parameter",
+                "es": "Otro parámetro"
+              }
+            }
+          ]
+        },
+        {
+          "key": "period",
+          "type": "select",
+          "required": false,
+          "default": "90",
+          "label": {
+            "en": "Period",
+            "fr": "Période",
+            "de": "Zeitraum",
+            "es": "Periodo"
+          },
+          "options": [
+            {
+              "value": "30",
+              "label": {
+                "en": "30 days",
+                "fr": "30 jours",
+                "de": "30 Tage",
+                "es": "30 días"
+              }
+            },
+            {
+              "value": "90",
+              "label": {
+                "en": "90 days",
+                "fr": "90 jours",
+                "de": "90 Tage",
+                "es": "90 días"
+              }
+            },
+            {
+              "value": "365",
+              "label": {
+                "en": "One year",
+                "fr": "Un an",
+                "de": "Ein Jahr",
+                "es": "Un año"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "new_measurement",
+      "label": {
+        "en": "Pool Lab: new measurement",
+        "fr": "Pool Lab : nouvelle mesure",
+        "de": "Pool Lab: neue Messung",
+        "es": "Pool Lab: nueva medición"
+      },
+      "description": {
+        "en": "A parameter of a pool has a new measurement in LabCom (one event per parameter tested).",
+        "fr": "Un paramètre d’un bassin a une nouvelle mesure dans LabCom (un événement par paramètre testé).",
+        "de": "Ein Parameter eines Beckens hat eine neue Messung in LabCom (ein Ereignis pro getestetem Parameter).",
+        "es": "Un parámetro de una piscina tiene una nueva medición en LabCom (un evento por parámetro analizado)."
+      },
+      "fields": [
+        {
+          "key": "pool",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "Pool",
+            "fr": "Bassin",
+            "de": "Becken",
+            "es": "Piscina"
+          },
+          "description": {
+            "en": "A Pool Lab device. Leave empty for any pool.",
+            "fr": "Un appareil Pool Lab. Laissez vide pour n’importe quel bassin.",
+            "de": "Ein Pool-Lab-Gerät. Leer lassen für jedes Becken.",
+            "es": "Un dispositivo Pool Lab. Déjelo vacío para cualquier piscina."
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "multi_select",
+          "required": false,
+          "label": {
+            "en": "Parameters",
+            "fr": "Paramètres",
+            "de": "Parameter",
+            "es": "Parámetros"
+          },
+          "description": {
+            "en": "Leave empty for any parameter.",
+            "fr": "Laissez vide pour tous les paramètres.",
+            "de": "Leer lassen für jeden Parameter.",
+            "es": "Déjelo vacío para cualquier parámetro."
+          },
+          "options": [
+            {
+              "value": "ph",
+              "label": {
+                "en": "pH",
+                "fr": "pH",
+                "de": "pH-Wert",
+                "es": "pH"
+              }
+            },
+            {
+              "value": "chlorine_free",
+              "label": {
+                "en": "Free chlorine",
+                "fr": "Chlore libre",
+                "de": "Freies Chlor",
+                "es": "Cloro libre"
+              }
+            },
+            {
+              "value": "chlorine_total",
+              "label": {
+                "en": "Total chlorine",
+                "fr": "Chlore total",
+                "de": "Gesamtchlor",
+                "es": "Cloro total"
+              }
+            },
+            {
+              "value": "chlorine_combined",
+              "label": {
+                "en": "Combined chlorine",
+                "fr": "Chlore combiné",
+                "de": "Gebundenes Chlor",
+                "es": "Cloro combinado"
+              }
+            },
+            {
+              "value": "bromine",
+              "label": {
+                "en": "Bromine",
+                "fr": "Brome",
+                "de": "Brom",
+                "es": "Bromo"
+              }
+            },
+            {
+              "value": "active_oxygen",
+              "label": {
+                "en": "Active oxygen",
+                "fr": "Oxygène actif",
+                "de": "Aktivsauerstoff",
+                "es": "Oxígeno activo"
+              }
+            },
+            {
+              "value": "hydrogen_peroxide",
+              "label": {
+                "en": "Hydrogen peroxide",
+                "fr": "Peroxyde d’hydrogène",
+                "de": "Wasserstoffperoxid",
+                "es": "Peróxido de hidrógeno"
+              }
+            },
+            {
+              "value": "chlorine_dioxide",
+              "label": {
+                "en": "Chlorine dioxide",
+                "fr": "Dioxyde de chlore",
+                "de": "Chlordioxid",
+                "es": "Dióxido de cloro"
+              }
+            },
+            {
+              "value": "ozone",
+              "label": {
+                "en": "Ozone",
+                "fr": "Ozone",
+                "de": "Ozon",
+                "es": "Ozono"
+              }
+            },
+            {
+              "value": "phmb",
+              "label": {
+                "en": "PHMB (biguanide)",
+                "fr": "PHMB (biguanide)",
+                "de": "PHMB (Biguanid)",
+                "es": "PHMB (biguanida)"
+              }
+            },
+            {
+              "value": "cya",
+              "label": {
+                "en": "Cyanuric acid (stabilizer)",
+                "fr": "Acide cyanurique (stabilisant)",
+                "de": "Cyanursäure (Stabilisator)",
+                "es": "Ácido cianúrico (estabilizante)"
+              }
+            },
+            {
+              "value": "alkalinity",
+              "label": {
+                "en": "Total alkalinity (TA)",
+                "fr": "Alcalinité (TAC)",
+                "de": "Gesamtalkalität (TA)",
+                "es": "Alcalinidad total (TA)"
+              }
+            },
+            {
+              "value": "calcium_hardness",
+              "label": {
+                "en": "Calcium hardness",
+                "fr": "Dureté calcique",
+                "de": "Calciumhärte",
+                "es": "Dureza cálcica"
+              }
+            },
+            {
+              "value": "total_hardness",
+              "label": {
+                "en": "Total hardness",
+                "fr": "Dureté totale (TH)",
+                "de": "Gesamthärte",
+                "es": "Dureza total"
+              }
+            },
+            {
+              "value": "salt",
+              "label": {
+                "en": "Salt",
+                "fr": "Sel",
+                "de": "Salz",
+                "es": "Sal"
+              }
+            },
+            {
+              "value": "phosphate",
+              "label": {
+                "en": "Phosphate",
+                "fr": "Phosphates",
+                "de": "Phosphat",
+                "es": "Fosfatos"
+              }
+            },
+            {
+              "value": "temperature",
+              "label": {
+                "en": "Water temperature",
+                "fr": "Température de l’eau",
+                "de": "Wassertemperatur",
+                "es": "Temperatura del agua"
+              }
+            },
+            {
+              "value": "orp",
+              "label": {
+                "en": "Redox (ORP)",
+                "fr": "Redox (ORP)",
+                "de": "Redox (ORP)",
+                "es": "Redox (ORP)"
+              }
+            },
+            {
+              "value": "other",
+              "label": {
+                "en": "Other parameter",
+                "fr": "Autre paramètre",
+                "de": "Anderer Parameter",
+                "es": "Otro parámetro"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "pool",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "pool_name",
+          "type": "string",
+          "label": {
+            "en": "Pool name",
+            "fr": "Nom du bassin",
+            "de": "Name des Beckens",
+            "es": "Nombre de la piscina"
+          }
+        },
+        {
+          "key": "account_id",
+          "type": "number",
+          "label": {
+            "en": "LabCom account id",
+            "fr": "Identifiant du compte LabCom",
+            "de": "LabCom-Konto-ID",
+            "es": "Identificador de la cuenta LabCom"
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "string",
+          "label": {
+            "en": "Parameter (key)",
+            "fr": "Paramètre (clé)",
+            "de": "Parameter (Schlüssel)",
+            "es": "Parámetro (clave)"
+          }
+        },
+        {
+          "key": "parameter_label",
+          "type": "string",
+          "label": {
+            "en": "Parameter",
+            "fr": "Paramètre",
+            "de": "Parameter",
+            "es": "Parámetro"
+          }
+        },
+        {
+          "key": "parameter_name",
+          "type": "string",
+          "label": {
+            "en": "Parameter name in LabCom",
+            "fr": "Nom du paramètre dans LabCom",
+            "de": "Parametername in LabCom",
+            "es": "Nombre del parámetro en LabCom"
+          }
+        },
+        {
+          "key": "parameter_id",
+          "type": "number",
+          "label": {
+            "en": "LabCom parameter id",
+            "fr": "Identifiant LabCom du paramètre",
+            "de": "LabCom-Parameter-ID",
+            "es": "Identificador LabCom del parámetro"
+          }
+        },
+        {
+          "key": "value",
+          "type": "number",
+          "label": {
+            "en": "Value",
+            "fr": "Valeur",
+            "de": "Wert",
+            "es": "Valor"
+          }
+        },
+        {
+          "key": "value_text",
+          "type": "string",
+          "label": {
+            "en": "Value (text)",
+            "fr": "Valeur (texte)",
+            "de": "Wert (Text)",
+            "es": "Valor (texto)"
+          }
+        },
+        {
+          "key": "unit",
+          "type": "string",
+          "label": {
+            "en": "Unit",
+            "fr": "Unité",
+            "de": "Einheit",
+            "es": "Unidad"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status (key)",
+            "fr": "État de la plage idéale (clé)",
+            "de": "Status des Idealbereichs (Schlüssel)",
+            "es": "Estado del rango ideal (clave)"
+          }
+        },
+        {
+          "key": "status_label",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status",
+            "fr": "État de la plage idéale",
+            "de": "Status des Idealbereichs",
+            "es": "Estado del rango ideal"
+          }
+        },
+        {
+          "key": "ideal_low",
+          "type": "number",
+          "label": {
+            "en": "Ideal low",
+            "fr": "Idéal bas",
+            "de": "Ideal unten",
+            "es": "Ideal mínimo"
+          }
+        },
+        {
+          "key": "ideal_high",
+          "type": "number",
+          "label": {
+            "en": "Ideal high",
+            "fr": "Idéal haut",
+            "de": "Ideal oben",
+            "es": "Ideal máximo"
+          }
+        },
+        {
+          "key": "measured_at",
+          "type": "string",
+          "label": {
+            "en": "Measured at (ISO date)",
+            "fr": "Mesuré le (date ISO)",
+            "de": "Gemessen am (ISO-Datum)",
+            "es": "Medido el (fecha ISO)"
+          }
+        },
+        {
+          "key": "device_serial",
+          "type": "string",
+          "label": {
+            "en": "Photometer serial number",
+            "fr": "Numéro de série du photomètre",
+            "de": "Seriennummer des Photometers",
+            "es": "Número de serie del fotómetro"
+          }
+        }
+      ]
+    },
+    {
+      "key": "parameter_out_of_range",
+      "label": {
+        "en": "Pool Lab: parameter out of range",
+        "fr": "Pool Lab : paramètre hors plage",
+        "de": "Pool Lab: Parameter außerhalb",
+        "es": "Pool Lab: parámetro fuera de rango"
+      },
+      "description": {
+        "en": "A parameter goes too low or too high for its ideal range in LabCom.",
+        "fr": "Un paramètre passe trop bas ou trop haut par rapport à sa plage idéale dans LabCom.",
+        "de": "Ein Parameter wird zu niedrig oder zu hoch für seinen Idealbereich in LabCom.",
+        "es": "Un parámetro pasa a estar demasiado bajo o alto para su rango ideal en LabCom."
+      },
+      "fields": [
+        {
+          "key": "pool",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "Pool",
+            "fr": "Bassin",
+            "de": "Becken",
+            "es": "Piscina"
+          },
+          "description": {
+            "en": "A Pool Lab device. Leave empty for any pool.",
+            "fr": "Un appareil Pool Lab. Laissez vide pour n’importe quel bassin.",
+            "de": "Ein Pool-Lab-Gerät. Leer lassen für jedes Becken.",
+            "es": "Un dispositivo Pool Lab. Déjelo vacío para cualquier piscina."
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "multi_select",
+          "required": false,
+          "label": {
+            "en": "Parameters",
+            "fr": "Paramètres",
+            "de": "Parameter",
+            "es": "Parámetros"
+          },
+          "description": {
+            "en": "Leave empty for any parameter.",
+            "fr": "Laissez vide pour tous les paramètres.",
+            "de": "Leer lassen für jeden Parameter.",
+            "es": "Déjelo vacío para cualquier parámetro."
+          },
+          "options": [
+            {
+              "value": "ph",
+              "label": {
+                "en": "pH",
+                "fr": "pH",
+                "de": "pH-Wert",
+                "es": "pH"
+              }
+            },
+            {
+              "value": "chlorine_free",
+              "label": {
+                "en": "Free chlorine",
+                "fr": "Chlore libre",
+                "de": "Freies Chlor",
+                "es": "Cloro libre"
+              }
+            },
+            {
+              "value": "chlorine_total",
+              "label": {
+                "en": "Total chlorine",
+                "fr": "Chlore total",
+                "de": "Gesamtchlor",
+                "es": "Cloro total"
+              }
+            },
+            {
+              "value": "chlorine_combined",
+              "label": {
+                "en": "Combined chlorine",
+                "fr": "Chlore combiné",
+                "de": "Gebundenes Chlor",
+                "es": "Cloro combinado"
+              }
+            },
+            {
+              "value": "bromine",
+              "label": {
+                "en": "Bromine",
+                "fr": "Brome",
+                "de": "Brom",
+                "es": "Bromo"
+              }
+            },
+            {
+              "value": "active_oxygen",
+              "label": {
+                "en": "Active oxygen",
+                "fr": "Oxygène actif",
+                "de": "Aktivsauerstoff",
+                "es": "Oxígeno activo"
+              }
+            },
+            {
+              "value": "hydrogen_peroxide",
+              "label": {
+                "en": "Hydrogen peroxide",
+                "fr": "Peroxyde d’hydrogène",
+                "de": "Wasserstoffperoxid",
+                "es": "Peróxido de hidrógeno"
+              }
+            },
+            {
+              "value": "chlorine_dioxide",
+              "label": {
+                "en": "Chlorine dioxide",
+                "fr": "Dioxyde de chlore",
+                "de": "Chlordioxid",
+                "es": "Dióxido de cloro"
+              }
+            },
+            {
+              "value": "ozone",
+              "label": {
+                "en": "Ozone",
+                "fr": "Ozone",
+                "de": "Ozon",
+                "es": "Ozono"
+              }
+            },
+            {
+              "value": "phmb",
+              "label": {
+                "en": "PHMB (biguanide)",
+                "fr": "PHMB (biguanide)",
+                "de": "PHMB (Biguanid)",
+                "es": "PHMB (biguanida)"
+              }
+            },
+            {
+              "value": "cya",
+              "label": {
+                "en": "Cyanuric acid (stabilizer)",
+                "fr": "Acide cyanurique (stabilisant)",
+                "de": "Cyanursäure (Stabilisator)",
+                "es": "Ácido cianúrico (estabilizante)"
+              }
+            },
+            {
+              "value": "alkalinity",
+              "label": {
+                "en": "Total alkalinity (TA)",
+                "fr": "Alcalinité (TAC)",
+                "de": "Gesamtalkalität (TA)",
+                "es": "Alcalinidad total (TA)"
+              }
+            },
+            {
+              "value": "calcium_hardness",
+              "label": {
+                "en": "Calcium hardness",
+                "fr": "Dureté calcique",
+                "de": "Calciumhärte",
+                "es": "Dureza cálcica"
+              }
+            },
+            {
+              "value": "total_hardness",
+              "label": {
+                "en": "Total hardness",
+                "fr": "Dureté totale (TH)",
+                "de": "Gesamthärte",
+                "es": "Dureza total"
+              }
+            },
+            {
+              "value": "salt",
+              "label": {
+                "en": "Salt",
+                "fr": "Sel",
+                "de": "Salz",
+                "es": "Sal"
+              }
+            },
+            {
+              "value": "phosphate",
+              "label": {
+                "en": "Phosphate",
+                "fr": "Phosphates",
+                "de": "Phosphat",
+                "es": "Fosfatos"
+              }
+            },
+            {
+              "value": "temperature",
+              "label": {
+                "en": "Water temperature",
+                "fr": "Température de l’eau",
+                "de": "Wassertemperatur",
+                "es": "Temperatura del agua"
+              }
+            },
+            {
+              "value": "orp",
+              "label": {
+                "en": "Redox (ORP)",
+                "fr": "Redox (ORP)",
+                "de": "Redox (ORP)",
+                "es": "Redox (ORP)"
+              }
+            },
+            {
+              "value": "other",
+              "label": {
+                "en": "Other parameter",
+                "fr": "Autre paramètre",
+                "de": "Anderer Parameter",
+                "es": "Otro parámetro"
+              }
+            }
+          ]
+        },
+        {
+          "key": "status",
+          "type": "multi_select",
+          "required": false,
+          "label": {
+            "en": "Direction",
+            "fr": "Sens",
+            "de": "Richtung",
+            "es": "Dirección"
+          },
+          "description": {
+            "en": "Leave empty for both.",
+            "fr": "Laissez vide pour les deux.",
+            "de": "Leer lassen für beide.",
+            "es": "Déjelo vacío para ambas."
+          },
+          "options": [
+            {
+              "value": "too_low",
+              "label": {
+                "en": "Too low",
+                "fr": "Trop bas",
+                "de": "Zu niedrig",
+                "es": "Demasiado bajo"
+              }
+            },
+            {
+              "value": "too_high",
+              "label": {
+                "en": "Too high",
+                "fr": "Trop haut",
+                "de": "Zu hoch",
+                "es": "Demasiado alto"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "pool",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "pool_name",
+          "type": "string",
+          "label": {
+            "en": "Pool name",
+            "fr": "Nom du bassin",
+            "de": "Name des Beckens",
+            "es": "Nombre de la piscina"
+          }
+        },
+        {
+          "key": "account_id",
+          "type": "number",
+          "label": {
+            "en": "LabCom account id",
+            "fr": "Identifiant du compte LabCom",
+            "de": "LabCom-Konto-ID",
+            "es": "Identificador de la cuenta LabCom"
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "string",
+          "label": {
+            "en": "Parameter (key)",
+            "fr": "Paramètre (clé)",
+            "de": "Parameter (Schlüssel)",
+            "es": "Parámetro (clave)"
+          }
+        },
+        {
+          "key": "parameter_label",
+          "type": "string",
+          "label": {
+            "en": "Parameter",
+            "fr": "Paramètre",
+            "de": "Parameter",
+            "es": "Parámetro"
+          }
+        },
+        {
+          "key": "parameter_name",
+          "type": "string",
+          "label": {
+            "en": "Parameter name in LabCom",
+            "fr": "Nom du paramètre dans LabCom",
+            "de": "Parametername in LabCom",
+            "es": "Nombre del parámetro en LabCom"
+          }
+        },
+        {
+          "key": "parameter_id",
+          "type": "number",
+          "label": {
+            "en": "LabCom parameter id",
+            "fr": "Identifiant LabCom du paramètre",
+            "de": "LabCom-Parameter-ID",
+            "es": "Identificador LabCom del parámetro"
+          }
+        },
+        {
+          "key": "value",
+          "type": "number",
+          "label": {
+            "en": "Value",
+            "fr": "Valeur",
+            "de": "Wert",
+            "es": "Valor"
+          }
+        },
+        {
+          "key": "value_text",
+          "type": "string",
+          "label": {
+            "en": "Value (text)",
+            "fr": "Valeur (texte)",
+            "de": "Wert (Text)",
+            "es": "Valor (texto)"
+          }
+        },
+        {
+          "key": "unit",
+          "type": "string",
+          "label": {
+            "en": "Unit",
+            "fr": "Unité",
+            "de": "Einheit",
+            "es": "Unidad"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status (key)",
+            "fr": "État de la plage idéale (clé)",
+            "de": "Status des Idealbereichs (Schlüssel)",
+            "es": "Estado del rango ideal (clave)"
+          }
+        },
+        {
+          "key": "status_label",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status",
+            "fr": "État de la plage idéale",
+            "de": "Status des Idealbereichs",
+            "es": "Estado del rango ideal"
+          }
+        },
+        {
+          "key": "ideal_low",
+          "type": "number",
+          "label": {
+            "en": "Ideal low",
+            "fr": "Idéal bas",
+            "de": "Ideal unten",
+            "es": "Ideal mínimo"
+          }
+        },
+        {
+          "key": "ideal_high",
+          "type": "number",
+          "label": {
+            "en": "Ideal high",
+            "fr": "Idéal haut",
+            "de": "Ideal oben",
+            "es": "Ideal máximo"
+          }
+        },
+        {
+          "key": "measured_at",
+          "type": "string",
+          "label": {
+            "en": "Measured at (ISO date)",
+            "fr": "Mesuré le (date ISO)",
+            "de": "Gemessen am (ISO-Datum)",
+            "es": "Medido el (fecha ISO)"
+          }
+        },
+        {
+          "key": "device_serial",
+          "type": "string",
+          "label": {
+            "en": "Photometer serial number",
+            "fr": "Numéro de série du photomètre",
+            "de": "Seriennummer des Photometers",
+            "es": "Número de serie del fotómetro"
+          }
+        },
+        {
+          "key": "previous_status",
+          "type": "string",
+          "label": {
+            "en": "Previous status (key)",
+            "fr": "État précédent (clé)",
+            "de": "Vorheriger Status (Schlüssel)",
+            "es": "Estado anterior (clave)"
+          }
+        },
+        {
+          "key": "previous_status_label",
+          "type": "string",
+          "label": {
+            "en": "Previous status",
+            "fr": "État précédent",
+            "de": "Vorheriger Status",
+            "es": "Estado anterior"
+          }
+        }
+      ]
+    },
+    {
+      "key": "parameter_back_in_range",
+      "label": {
+        "en": "Pool Lab: back in range",
+        "fr": "Pool Lab : retour dans la plage",
+        "de": "Pool Lab: wieder im Bereich",
+        "es": "Pool Lab: de vuelta en rango"
+      },
+      "description": {
+        "en": "A parameter that was too low or too high is back in its ideal range.",
+        "fr": "Un paramètre trop bas ou trop haut revient dans sa plage idéale.",
+        "de": "Ein zu niedriger oder zu hoher Parameter ist wieder in seinem Idealbereich.",
+        "es": "Un parámetro demasiado bajo o alto vuelve a su rango ideal."
+      },
+      "fields": [
+        {
+          "key": "pool",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "Pool",
+            "fr": "Bassin",
+            "de": "Becken",
+            "es": "Piscina"
+          },
+          "description": {
+            "en": "A Pool Lab device. Leave empty for any pool.",
+            "fr": "Un appareil Pool Lab. Laissez vide pour n’importe quel bassin.",
+            "de": "Ein Pool-Lab-Gerät. Leer lassen für jedes Becken.",
+            "es": "Un dispositivo Pool Lab. Déjelo vacío para cualquier piscina."
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "multi_select",
+          "required": false,
+          "label": {
+            "en": "Parameters",
+            "fr": "Paramètres",
+            "de": "Parameter",
+            "es": "Parámetros"
+          },
+          "description": {
+            "en": "Leave empty for any parameter.",
+            "fr": "Laissez vide pour tous les paramètres.",
+            "de": "Leer lassen für jeden Parameter.",
+            "es": "Déjelo vacío para cualquier parámetro."
+          },
+          "options": [
+            {
+              "value": "ph",
+              "label": {
+                "en": "pH",
+                "fr": "pH",
+                "de": "pH-Wert",
+                "es": "pH"
+              }
+            },
+            {
+              "value": "chlorine_free",
+              "label": {
+                "en": "Free chlorine",
+                "fr": "Chlore libre",
+                "de": "Freies Chlor",
+                "es": "Cloro libre"
+              }
+            },
+            {
+              "value": "chlorine_total",
+              "label": {
+                "en": "Total chlorine",
+                "fr": "Chlore total",
+                "de": "Gesamtchlor",
+                "es": "Cloro total"
+              }
+            },
+            {
+              "value": "chlorine_combined",
+              "label": {
+                "en": "Combined chlorine",
+                "fr": "Chlore combiné",
+                "de": "Gebundenes Chlor",
+                "es": "Cloro combinado"
+              }
+            },
+            {
+              "value": "bromine",
+              "label": {
+                "en": "Bromine",
+                "fr": "Brome",
+                "de": "Brom",
+                "es": "Bromo"
+              }
+            },
+            {
+              "value": "active_oxygen",
+              "label": {
+                "en": "Active oxygen",
+                "fr": "Oxygène actif",
+                "de": "Aktivsauerstoff",
+                "es": "Oxígeno activo"
+              }
+            },
+            {
+              "value": "hydrogen_peroxide",
+              "label": {
+                "en": "Hydrogen peroxide",
+                "fr": "Peroxyde d’hydrogène",
+                "de": "Wasserstoffperoxid",
+                "es": "Peróxido de hidrógeno"
+              }
+            },
+            {
+              "value": "chlorine_dioxide",
+              "label": {
+                "en": "Chlorine dioxide",
+                "fr": "Dioxyde de chlore",
+                "de": "Chlordioxid",
+                "es": "Dióxido de cloro"
+              }
+            },
+            {
+              "value": "ozone",
+              "label": {
+                "en": "Ozone",
+                "fr": "Ozone",
+                "de": "Ozon",
+                "es": "Ozono"
+              }
+            },
+            {
+              "value": "phmb",
+              "label": {
+                "en": "PHMB (biguanide)",
+                "fr": "PHMB (biguanide)",
+                "de": "PHMB (Biguanid)",
+                "es": "PHMB (biguanida)"
+              }
+            },
+            {
+              "value": "cya",
+              "label": {
+                "en": "Cyanuric acid (stabilizer)",
+                "fr": "Acide cyanurique (stabilisant)",
+                "de": "Cyanursäure (Stabilisator)",
+                "es": "Ácido cianúrico (estabilizante)"
+              }
+            },
+            {
+              "value": "alkalinity",
+              "label": {
+                "en": "Total alkalinity (TA)",
+                "fr": "Alcalinité (TAC)",
+                "de": "Gesamtalkalität (TA)",
+                "es": "Alcalinidad total (TA)"
+              }
+            },
+            {
+              "value": "calcium_hardness",
+              "label": {
+                "en": "Calcium hardness",
+                "fr": "Dureté calcique",
+                "de": "Calciumhärte",
+                "es": "Dureza cálcica"
+              }
+            },
+            {
+              "value": "total_hardness",
+              "label": {
+                "en": "Total hardness",
+                "fr": "Dureté totale (TH)",
+                "de": "Gesamthärte",
+                "es": "Dureza total"
+              }
+            },
+            {
+              "value": "salt",
+              "label": {
+                "en": "Salt",
+                "fr": "Sel",
+                "de": "Salz",
+                "es": "Sal"
+              }
+            },
+            {
+              "value": "phosphate",
+              "label": {
+                "en": "Phosphate",
+                "fr": "Phosphates",
+                "de": "Phosphat",
+                "es": "Fosfatos"
+              }
+            },
+            {
+              "value": "temperature",
+              "label": {
+                "en": "Water temperature",
+                "fr": "Température de l’eau",
+                "de": "Wassertemperatur",
+                "es": "Temperatura del agua"
+              }
+            },
+            {
+              "value": "orp",
+              "label": {
+                "en": "Redox (ORP)",
+                "fr": "Redox (ORP)",
+                "de": "Redox (ORP)",
+                "es": "Redox (ORP)"
+              }
+            },
+            {
+              "value": "other",
+              "label": {
+                "en": "Other parameter",
+                "fr": "Autre paramètre",
+                "de": "Anderer Parameter",
+                "es": "Otro parámetro"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "pool",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "pool_name",
+          "type": "string",
+          "label": {
+            "en": "Pool name",
+            "fr": "Nom du bassin",
+            "de": "Name des Beckens",
+            "es": "Nombre de la piscina"
+          }
+        },
+        {
+          "key": "account_id",
+          "type": "number",
+          "label": {
+            "en": "LabCom account id",
+            "fr": "Identifiant du compte LabCom",
+            "de": "LabCom-Konto-ID",
+            "es": "Identificador de la cuenta LabCom"
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "string",
+          "label": {
+            "en": "Parameter (key)",
+            "fr": "Paramètre (clé)",
+            "de": "Parameter (Schlüssel)",
+            "es": "Parámetro (clave)"
+          }
+        },
+        {
+          "key": "parameter_label",
+          "type": "string",
+          "label": {
+            "en": "Parameter",
+            "fr": "Paramètre",
+            "de": "Parameter",
+            "es": "Parámetro"
+          }
+        },
+        {
+          "key": "parameter_name",
+          "type": "string",
+          "label": {
+            "en": "Parameter name in LabCom",
+            "fr": "Nom du paramètre dans LabCom",
+            "de": "Parametername in LabCom",
+            "es": "Nombre del parámetro en LabCom"
+          }
+        },
+        {
+          "key": "parameter_id",
+          "type": "number",
+          "label": {
+            "en": "LabCom parameter id",
+            "fr": "Identifiant LabCom du paramètre",
+            "de": "LabCom-Parameter-ID",
+            "es": "Identificador LabCom del parámetro"
+          }
+        },
+        {
+          "key": "value",
+          "type": "number",
+          "label": {
+            "en": "Value",
+            "fr": "Valeur",
+            "de": "Wert",
+            "es": "Valor"
+          }
+        },
+        {
+          "key": "value_text",
+          "type": "string",
+          "label": {
+            "en": "Value (text)",
+            "fr": "Valeur (texte)",
+            "de": "Wert (Text)",
+            "es": "Valor (texto)"
+          }
+        },
+        {
+          "key": "unit",
+          "type": "string",
+          "label": {
+            "en": "Unit",
+            "fr": "Unité",
+            "de": "Einheit",
+            "es": "Unidad"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status (key)",
+            "fr": "État de la plage idéale (clé)",
+            "de": "Status des Idealbereichs (Schlüssel)",
+            "es": "Estado del rango ideal (clave)"
+          }
+        },
+        {
+          "key": "status_label",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status",
+            "fr": "État de la plage idéale",
+            "de": "Status des Idealbereichs",
+            "es": "Estado del rango ideal"
+          }
+        },
+        {
+          "key": "ideal_low",
+          "type": "number",
+          "label": {
+            "en": "Ideal low",
+            "fr": "Idéal bas",
+            "de": "Ideal unten",
+            "es": "Ideal mínimo"
+          }
+        },
+        {
+          "key": "ideal_high",
+          "type": "number",
+          "label": {
+            "en": "Ideal high",
+            "fr": "Idéal haut",
+            "de": "Ideal oben",
+            "es": "Ideal máximo"
+          }
+        },
+        {
+          "key": "measured_at",
+          "type": "string",
+          "label": {
+            "en": "Measured at (ISO date)",
+            "fr": "Mesuré le (date ISO)",
+            "de": "Gemessen am (ISO-Datum)",
+            "es": "Medido el (fecha ISO)"
+          }
+        },
+        {
+          "key": "device_serial",
+          "type": "string",
+          "label": {
+            "en": "Photometer serial number",
+            "fr": "Numéro de série du photomètre",
+            "de": "Seriennummer des Photometers",
+            "es": "Número de serie del fotómetro"
+          }
+        },
+        {
+          "key": "previous_status",
+          "type": "string",
+          "label": {
+            "en": "Previous status (key)",
+            "fr": "État précédent (clé)",
+            "de": "Vorheriger Status (Schlüssel)",
+            "es": "Estado anterior (clave)"
+          }
+        },
+        {
+          "key": "previous_status_label",
+          "type": "string",
+          "label": {
+            "en": "Previous status",
+            "fr": "État précédent",
+            "de": "Vorheriger Status",
+            "es": "Estado anterior"
+          }
+        }
+      ]
+    },
+    {
+      "key": "test_overdue",
+      "label": {
+        "en": "Pool Lab: water test overdue",
+        "fr": "Pool Lab : test de l’eau en retard",
+        "de": "Pool Lab: Wassertest überfällig",
+        "es": "Pool Lab: análisis del agua pendiente"
+      },
+      "description": {
+        "en": "No measurement on a pool for the delay of the configuration (once, until the next test).",
+        "fr": "Aucune mesure sur un bassin depuis le délai de la configuration (une fois, jusqu’au prochain test).",
+        "de": "Keine Messung an einem Becken seit der eingestellten Frist (einmal, bis zum nächsten Test).",
+        "es": "Ninguna medición en una piscina durante el plazo de la configuración (una vez, hasta el próximo análisis)."
+      },
+      "fields": [
+        {
+          "key": "pool",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "Pool",
+            "fr": "Bassin",
+            "de": "Becken",
+            "es": "Piscina"
+          },
+          "description": {
+            "en": "A Pool Lab device. Leave empty for any pool.",
+            "fr": "Un appareil Pool Lab. Laissez vide pour n’importe quel bassin.",
+            "de": "Ein Pool-Lab-Gerät. Leer lassen für jedes Becken.",
+            "es": "Un dispositivo Pool Lab. Déjelo vacío para cualquier piscina."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "pool",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "pool_name",
+          "type": "string",
+          "label": {
+            "en": "Pool name",
+            "fr": "Nom du bassin",
+            "de": "Name des Beckens",
+            "es": "Nombre de la piscina"
+          }
+        },
+        {
+          "key": "account_id",
+          "type": "number",
+          "label": {
+            "en": "LabCom account id",
+            "fr": "Identifiant du compte LabCom",
+            "de": "LabCom-Konto-ID",
+            "es": "Identificador de la cuenta LabCom"
+          }
+        },
+        {
+          "key": "last_measurement_at",
+          "type": "string",
+          "label": {
+            "en": "Last measurement (ISO date)",
+            "fr": "Dernière mesure (date ISO)",
+            "de": "Letzte Messung (ISO-Datum)",
+            "es": "Última medición (fecha ISO)"
+          }
+        },
+        {
+          "key": "days_since",
+          "type": "number",
+          "label": {
+            "en": "Days since the last measurement",
+            "fr": "Jours depuis la dernière mesure",
+            "de": "Tage seit der letzten Messung",
+            "es": "Días desde la última medición"
+          }
+        }
+      ]
+    },
+    {
+      "key": "access_refused",
+      "label": {
+        "en": "Pool Lab: token refused",
+        "fr": "Pool Lab : jeton refusé",
+        "de": "Pool Lab: Token abgelehnt",
+        "es": "Pool Lab: token rechazado"
+      },
+      "description": {
+        "en": "LabCom refuses the API token (deleted or expired): no reading until a new one is set.",
+        "fr": "LabCom refuse le jeton d’API (supprimé ou expiré) : plus de lecture tant qu’un nouveau n’est pas saisi.",
+        "de": "LabCom lehnt das API-Token ab (gelöscht oder abgelaufen): keine Abfrage, bis ein neues eingegeben ist.",
+        "es": "LabCom rechaza el token de API (borrado o caducado): no hay lecturas hasta introducir uno nuevo."
+      },
+      "fields": [],
+      "variables": [
+        {
+          "key": "message",
+          "type": "string",
+          "label": {
+            "en": "Message",
+            "fr": "Message",
+            "de": "Meldung",
+            "es": "Mensaje"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "refresh",
+      "timeout_seconds": 60,
+      "label": {
+        "en": "Pool Lab: refresh now",
+        "fr": "Pool Lab : actualiser maintenant",
+        "de": "Pool Lab: jetzt aktualisieren",
+        "es": "Pool Lab: actualizar ahora"
+      },
+      "description": {
+        "en": "Reads LabCom now (once a minute at most). The triggers follow at the next round.",
+        "fr": "Lit LabCom maintenant (une fois par minute au plus). Les déclencheurs suivent au tour suivant.",
+        "de": "Liest LabCom jetzt (höchstens einmal pro Minute). Die Auslöser folgen in der nächsten Runde.",
+        "es": "Lee LabCom ahora (como máximo una vez por minuto). Los disparadores siguen en la próxima ronda."
+      },
+      "fields": [],
+      "outputs": [
+        {
+          "key": "pool_count",
+          "type": "number",
+          "label": {
+            "en": "Pools with measurements",
+            "fr": "Bassins avec des mesures",
+            "de": "Becken mit Messungen",
+            "es": "Piscinas con mediciones"
+          }
+        },
+        {
+          "key": "out_of_range_count",
+          "type": "number",
+          "label": {
+            "en": "Parameters out of range",
+            "fr": "Paramètres hors plage",
+            "de": "Parameter außerhalb des Bereichs",
+            "es": "Parámetros fuera de rango"
+          }
+        },
+        {
+          "key": "last_measurement_at",
+          "type": "string",
+          "label": {
+            "en": "Last measurement (ISO date)",
+            "fr": "Dernière mesure (date ISO)",
+            "de": "Letzte Messung (ISO-Datum)",
+            "es": "Última medición (fecha ISO)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "get_parameter",
+      "timeout_seconds": 10,
+      "label": {
+        "en": "Pool Lab: last value of a parameter",
+        "fr": "Pool Lab : dernière valeur d’un paramètre",
+        "de": "Pool Lab: letzter Wert eines Parameters",
+        "es": "Pool Lab: último valor de un parámetro"
+      },
+      "description": {
+        "en": "The last measurement of a parameter (no request): for a message or a condition.",
+        "fr": "La dernière mesure d’un paramètre (sans requête) : pour un message ou une condition.",
+        "de": "Die letzte Messung eines Parameters (ohne Anfrage): für eine Nachricht oder eine Bedingung.",
+        "es": "La última medición de un parámetro (sin petición): para un mensaje o una condición."
+      },
+      "fields": [
+        {
+          "key": "pool",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "Pool",
+            "fr": "Bassin",
+            "de": "Becken",
+            "es": "Piscina"
+          },
+          "description": {
+            "en": "A Pool Lab device. Leave empty for the first pool.",
+            "fr": "Un appareil Pool Lab. Laissez vide pour le premier bassin.",
+            "de": "Ein Pool-Lab-Gerät. Leer lassen für das erste Becken.",
+            "es": "Un dispositivo Pool Lab. Déjelo vacío para la primera piscina."
+          }
+        },
+        {
+          "key": "parameter",
+          "type": "select",
+          "required": true,
+          "default": "ph",
+          "label": {
+            "en": "Parameter",
+            "fr": "Paramètre",
+            "de": "Parameter",
+            "es": "Parámetro"
+          },
+          "options": [
+            {
+              "value": "ph",
+              "label": {
+                "en": "pH",
+                "fr": "pH",
+                "de": "pH-Wert",
+                "es": "pH"
+              }
+            },
+            {
+              "value": "chlorine_free",
+              "label": {
+                "en": "Free chlorine",
+                "fr": "Chlore libre",
+                "de": "Freies Chlor",
+                "es": "Cloro libre"
+              }
+            },
+            {
+              "value": "chlorine_total",
+              "label": {
+                "en": "Total chlorine",
+                "fr": "Chlore total",
+                "de": "Gesamtchlor",
+                "es": "Cloro total"
+              }
+            },
+            {
+              "value": "chlorine_combined",
+              "label": {
+                "en": "Combined chlorine",
+                "fr": "Chlore combiné",
+                "de": "Gebundenes Chlor",
+                "es": "Cloro combinado"
+              }
+            },
+            {
+              "value": "bromine",
+              "label": {
+                "en": "Bromine",
+                "fr": "Brome",
+                "de": "Brom",
+                "es": "Bromo"
+              }
+            },
+            {
+              "value": "active_oxygen",
+              "label": {
+                "en": "Active oxygen",
+                "fr": "Oxygène actif",
+                "de": "Aktivsauerstoff",
+                "es": "Oxígeno activo"
+              }
+            },
+            {
+              "value": "hydrogen_peroxide",
+              "label": {
+                "en": "Hydrogen peroxide",
+                "fr": "Peroxyde d’hydrogène",
+                "de": "Wasserstoffperoxid",
+                "es": "Peróxido de hidrógeno"
+              }
+            },
+            {
+              "value": "chlorine_dioxide",
+              "label": {
+                "en": "Chlorine dioxide",
+                "fr": "Dioxyde de chlore",
+                "de": "Chlordioxid",
+                "es": "Dióxido de cloro"
+              }
+            },
+            {
+              "value": "ozone",
+              "label": {
+                "en": "Ozone",
+                "fr": "Ozone",
+                "de": "Ozon",
+                "es": "Ozono"
+              }
+            },
+            {
+              "value": "phmb",
+              "label": {
+                "en": "PHMB (biguanide)",
+                "fr": "PHMB (biguanide)",
+                "de": "PHMB (Biguanid)",
+                "es": "PHMB (biguanida)"
+              }
+            },
+            {
+              "value": "cya",
+              "label": {
+                "en": "Cyanuric acid (stabilizer)",
+                "fr": "Acide cyanurique (stabilisant)",
+                "de": "Cyanursäure (Stabilisator)",
+                "es": "Ácido cianúrico (estabilizante)"
+              }
+            },
+            {
+              "value": "alkalinity",
+              "label": {
+                "en": "Total alkalinity (TA)",
+                "fr": "Alcalinité (TAC)",
+                "de": "Gesamtalkalität (TA)",
+                "es": "Alcalinidad total (TA)"
+              }
+            },
+            {
+              "value": "calcium_hardness",
+              "label": {
+                "en": "Calcium hardness",
+                "fr": "Dureté calcique",
+                "de": "Calciumhärte",
+                "es": "Dureza cálcica"
+              }
+            },
+            {
+              "value": "total_hardness",
+              "label": {
+                "en": "Total hardness",
+                "fr": "Dureté totale (TH)",
+                "de": "Gesamthärte",
+                "es": "Dureza total"
+              }
+            },
+            {
+              "value": "salt",
+              "label": {
+                "en": "Salt",
+                "fr": "Sel",
+                "de": "Salz",
+                "es": "Sal"
+              }
+            },
+            {
+              "value": "phosphate",
+              "label": {
+                "en": "Phosphate",
+                "fr": "Phosphates",
+                "de": "Phosphat",
+                "es": "Fosfatos"
+              }
+            },
+            {
+              "value": "temperature",
+              "label": {
+                "en": "Water temperature",
+                "fr": "Température de l’eau",
+                "de": "Wassertemperatur",
+                "es": "Temperatura del agua"
+              }
+            },
+            {
+              "value": "orp",
+              "label": {
+                "en": "Redox (ORP)",
+                "fr": "Redox (ORP)",
+                "de": "Redox (ORP)",
+                "es": "Redox (ORP)"
+              }
+            },
+            {
+              "value": "other",
+              "label": {
+                "en": "Other parameter",
+                "fr": "Autre paramètre",
+                "de": "Anderer Parameter",
+                "es": "Otro parámetro"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "pool_name",
+          "type": "string",
+          "label": {
+            "en": "Pool name",
+            "fr": "Nom du bassin",
+            "de": "Name des Beckens",
+            "es": "Nombre de la piscina"
+          }
+        },
+        {
+          "key": "parameter_name",
+          "type": "string",
+          "label": {
+            "en": "Parameter",
+            "fr": "Paramètre",
+            "de": "Parameter",
+            "es": "Parámetro"
+          }
+        },
+        {
+          "key": "value",
+          "type": "number",
+          "label": {
+            "en": "Value",
+            "fr": "Valeur",
+            "de": "Wert",
+            "es": "Valor"
+          }
+        },
+        {
+          "key": "value_text",
+          "type": "string",
+          "label": {
+            "en": "Value (text)",
+            "fr": "Valeur (texte)",
+            "de": "Wert (Text)",
+            "es": "Valor (texto)"
+          }
+        },
+        {
+          "key": "unit",
+          "type": "string",
+          "label": {
+            "en": "Unit",
+            "fr": "Unité",
+            "de": "Einheit",
+            "es": "Unidad"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status (key)",
+            "fr": "État de la plage idéale (clé)",
+            "de": "Status des Idealbereichs (Schlüssel)",
+            "es": "Estado del rango ideal (clave)"
+          }
+        },
+        {
+          "key": "status_label",
+          "type": "string",
+          "label": {
+            "en": "Ideal range status",
+            "fr": "État de la plage idéale",
+            "de": "Status des Idealbereichs",
+            "es": "Estado del rango ideal"
+          }
+        },
+        {
+          "key": "in_range",
+          "type": "boolean",
+          "label": {
+            "en": "In its ideal range",
+            "fr": "Dans sa plage idéale",
+            "de": "In seinem Idealbereich",
+            "es": "En su rango ideal"
+          }
+        },
+        {
+          "key": "ideal_low",
+          "type": "number",
+          "label": {
+            "en": "Ideal low",
+            "fr": "Idéal bas",
+            "de": "Ideal unten",
+            "es": "Ideal mínimo"
+          }
+        },
+        {
+          "key": "ideal_high",
+          "type": "number",
+          "label": {
+            "en": "Ideal high",
+            "fr": "Idéal haut",
+            "de": "Ideal oben",
+            "es": "Ideal máximo"
+          }
+        },
+        {
+          "key": "measured_at",
+          "type": "string",
+          "label": {
+            "en": "Measured at (ISO date)",
+            "fr": "Mesuré le (date ISO)",
+            "de": "Gemessen am (ISO-Datum)",
+            "es": "Medido el (fecha ISO)"
+          }
+        },
+        {
+          "key": "days_since",
+          "type": "number",
+          "label": {
+            "en": "Days since the measurement",
+            "fr": "Jours depuis la mesure",
+            "de": "Tage seit der Messung",
+            "es": "Días desde la medición"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary (text)",
+            "fr": "Résumé (texte)",
+            "de": "Zusammenfassung (Text)",
+            "es": "Resumen (texto)"
+          }
+        }
+      ]
+    }
+  ]
+}

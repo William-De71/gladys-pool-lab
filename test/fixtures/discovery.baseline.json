@@ -1,0 +1,634 @@
+{
+  "devices": {
+    "pool": {
+      "external_id": "ext:test-integration:pool:3101",
+      "should_poll": false,
+      "params": ["LABCOM_ACCOUNT_ID", "POOL_VOLUME", "DEVICE_SERIAL"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:pool:3101:p48",
+          "category": "ph-sensor",
+          "type": "decimal",
+          "unit": "ph",
+          "min": 0,
+          "max": 14,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3101:p13",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "ppm",
+          "min": 0,
+          "max": 20,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3101:p21",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "ppm",
+          "min": 0,
+          "max": 20,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3101:p20",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "ppm",
+          "min": 0,
+          "max": 300,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3101:p30",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "ppm",
+          "min": 0,
+          "max": 500,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3101:p32",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "ppm",
+          "min": 0,
+          "max": 1000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3101:water_balance",
+          "category": "text",
+          "type": "text",
+          "unit": null,
+          "min": 0,
+          "max": 0,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    "spa": {
+      "external_id": "ext:test-integration:pool:3102",
+      "should_poll": false,
+      "params": ["LABCOM_ACCOUNT_ID", "POOL_VOLUME", "DEVICE_SERIAL"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:pool:3102:p48",
+          "category": "ph-sensor",
+          "type": "decimal",
+          "unit": "ph",
+          "min": 0,
+          "max": 14,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3102:p13",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "ppm",
+          "min": 0,
+          "max": 20,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3102:p55",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "ppm",
+          "min": 0,
+          "max": 40,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:pool:3102:water_balance",
+          "category": "text",
+          "type": "text",
+          "unit": null,
+          "min": 0,
+          "max": 0,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    }
+  },
+  "manifest": {
+    "config_schema": [
+      {
+        "key": "intro",
+        "type": "section"
+      },
+      {
+        "key": "api_token",
+        "type": "secret"
+      },
+      {
+        "key": "readings",
+        "type": "section"
+      },
+      {
+        "key": "poll_interval",
+        "type": "select"
+      },
+      {
+        "key": "overdue_after",
+        "type": "select"
+      },
+      {
+        "key": "language",
+        "type": "select"
+      }
+    ],
+    "actions": ["test_connection", "diagnostic"],
+    "action_fields": {
+      "test_connection": [],
+      "diagnostic": []
+    },
+    "widgets": [
+      {
+        "key": "pool",
+        "settings": ["pool"],
+        "options": {}
+      },
+      {
+        "key": "parameter_history",
+        "settings": ["pool", "parameter", "period"],
+        "options": {
+          "parameter": [
+            "ph",
+            "chlorine_free",
+            "chlorine_total",
+            "chlorine_combined",
+            "bromine",
+            "active_oxygen",
+            "hydrogen_peroxide",
+            "chlorine_dioxide",
+            "ozone",
+            "phmb",
+            "cya",
+            "alkalinity",
+            "calcium_hardness",
+            "total_hardness",
+            "salt",
+            "phosphate",
+            "temperature",
+            "orp",
+            "other"
+          ],
+          "period": ["30", "90", "365"]
+        }
+      }
+    ],
+    "scene_triggers": [
+      {
+        "key": "new_measurement",
+        "fields": [
+          {
+            "key": "pool",
+            "options": []
+          },
+          {
+            "key": "parameter",
+            "options": [
+              "ph",
+              "chlorine_free",
+              "chlorine_total",
+              "chlorine_combined",
+              "bromine",
+              "active_oxygen",
+              "hydrogen_peroxide",
+              "chlorine_dioxide",
+              "ozone",
+              "phmb",
+              "cya",
+              "alkalinity",
+              "calcium_hardness",
+              "total_hardness",
+              "salt",
+              "phosphate",
+              "temperature",
+              "orp",
+              "other"
+            ]
+          }
+        ],
+        "variables": [
+          {
+            "key": "pool",
+            "type": "string"
+          },
+          {
+            "key": "pool_name",
+            "type": "string"
+          },
+          {
+            "key": "account_id",
+            "type": "number"
+          },
+          {
+            "key": "parameter",
+            "type": "string"
+          },
+          {
+            "key": "parameter_label",
+            "type": "string"
+          },
+          {
+            "key": "parameter_name",
+            "type": "string"
+          },
+          {
+            "key": "parameter_id",
+            "type": "number"
+          },
+          {
+            "key": "value",
+            "type": "number"
+          },
+          {
+            "key": "value_text",
+            "type": "string"
+          },
+          {
+            "key": "unit",
+            "type": "string"
+          },
+          {
+            "key": "status",
+            "type": "string"
+          },
+          {
+            "key": "status_label",
+            "type": "string"
+          },
+          {
+            "key": "ideal_low",
+            "type": "number"
+          },
+          {
+            "key": "ideal_high",
+            "type": "number"
+          },
+          {
+            "key": "measured_at",
+            "type": "string"
+          },
+          {
+            "key": "device_serial",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "parameter_out_of_range",
+        "fields": [
+          {
+            "key": "pool",
+            "options": []
+          },
+          {
+            "key": "parameter",
+            "options": [
+              "ph",
+              "chlorine_free",
+              "chlorine_total",
+              "chlorine_combined",
+              "bromine",
+              "active_oxygen",
+              "hydrogen_peroxide",
+              "chlorine_dioxide",
+              "ozone",
+              "phmb",
+              "cya",
+              "alkalinity",
+              "calcium_hardness",
+              "total_hardness",
+              "salt",
+              "phosphate",
+              "temperature",
+              "orp",
+              "other"
+            ]
+          },
+          {
+            "key": "status",
+            "options": ["too_low", "too_high"]
+          }
+        ],
+        "variables": [
+          {
+            "key": "pool",
+            "type": "string"
+          },
+          {
+            "key": "pool_name",
+            "type": "string"
+          },
+          {
+            "key": "account_id",
+            "type": "number"
+          },
+          {
+            "key": "parameter",
+            "type": "string"
+          },
+          {
+            "key": "parameter_label",
+            "type": "string"
+          },
+          {
+            "key": "parameter_name",
+            "type": "string"
+          },
+          {
+            "key": "parameter_id",
+            "type": "number"
+          },
+          {
+            "key": "value",
+            "type": "number"
+          },
+          {
+            "key": "value_text",
+            "type": "string"
+          },
+          {
+            "key": "unit",
+            "type": "string"
+          },
+          {
+            "key": "status",
+            "type": "string"
+          },
+          {
+            "key": "status_label",
+            "type": "string"
+          },
+          {
+            "key": "ideal_low",
+            "type": "number"
+          },
+          {
+            "key": "ideal_high",
+            "type": "number"
+          },
+          {
+            "key": "measured_at",
+            "type": "string"
+          },
+          {
+            "key": "device_serial",
+            "type": "string"
+          },
+          {
+            "key": "previous_status",
+            "type": "string"
+          },
+          {
+            "key": "previous_status_label",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "parameter_back_in_range",
+        "fields": [
+          {
+            "key": "pool",
+            "options": []
+          },
+          {
+            "key": "parameter",
+            "options": [
+              "ph",
+              "chlorine_free",
+              "chlorine_total",
+              "chlorine_combined",
+              "bromine",
+              "active_oxygen",
+              "hydrogen_peroxide",
+              "chlorine_dioxide",
+              "ozone",
+              "phmb",
+              "cya",
+              "alkalinity",
+              "calcium_hardness",
+              "total_hardness",
+              "salt",
+              "phosphate",
+              "temperature",
+              "orp",
+              "other"
+            ]
+          }
+        ],
+        "variables": [
+          {
+            "key": "pool",
+            "type": "string"
+          },
+          {
+            "key": "pool_name",
+            "type": "string"
+          },
+          {
+            "key": "account_id",
+            "type": "number"
+          },
+          {
+            "key": "parameter",
+            "type": "string"
+          },
+          {
+            "key": "parameter_label",
+            "type": "string"
+          },
+          {
+            "key": "parameter_name",
+            "type": "string"
+          },
+          {
+            "key": "parameter_id",
+            "type": "number"
+          },
+          {
+            "key": "value",
+            "type": "number"
+          },
+          {
+            "key": "value_text",
+            "type": "string"
+          },
+          {
+            "key": "unit",
+            "type": "string"
+          },
+          {
+            "key": "status",
+            "type": "string"
+          },
+          {
+            "key": "status_label",
+            "type": "string"
+          },
+          {
+            "key": "ideal_low",
+            "type": "number"
+          },
+          {
+            "key": "ideal_high",
+            "type": "number"
+          },
+          {
+            "key": "measured_at",
+            "type": "string"
+          },
+          {
+            "key": "device_serial",
+            "type": "string"
+          },
+          {
+            "key": "previous_status",
+            "type": "string"
+          },
+          {
+            "key": "previous_status_label",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "test_overdue",
+        "fields": [
+          {
+            "key": "pool",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "pool",
+            "type": "string"
+          },
+          {
+            "key": "pool_name",
+            "type": "string"
+          },
+          {
+            "key": "account_id",
+            "type": "number"
+          },
+          {
+            "key": "last_measurement_at",
+            "type": "string"
+          },
+          {
+            "key": "days_since",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "access_refused",
+        "fields": [],
+        "variables": [
+          {
+            "key": "message",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "scene_actions": [
+      {
+        "key": "refresh",
+        "fields": [],
+        "outputs": [
+          {
+            "key": "pool_count",
+            "type": "number"
+          },
+          {
+            "key": "out_of_range_count",
+            "type": "number"
+          },
+          {
+            "key": "last_measurement_at",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "get_parameter",
+        "fields": ["pool", "parameter"],
+        "outputs": [
+          {
+            "key": "pool_name",
+            "type": "string"
+          },
+          {
+            "key": "parameter_name",
+            "type": "string"
+          },
+          {
+            "key": "value",
+            "type": "number"
+          },
+          {
+            "key": "value_text",
+            "type": "string"
+          },
+          {
+            "key": "unit",
+            "type": "string"
+          },
+          {
+            "key": "status",
+            "type": "string"
+          },
+          {
+            "key": "status_label",
+            "type": "string"
+          },
+          {
+            "key": "in_range",
+            "type": "boolean"
+          },
+          {
+            "key": "ideal_low",
+            "type": "number"
+          },
+          {
+            "key": "ideal_high",
+            "type": "number"
+          },
+          {
+            "key": "measured_at",
+            "type": "string"
+          },
+          {
+            "key": "days_since",
+            "type": "number"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      }
+    ]
+  }
+}

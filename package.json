@@ -1,0 +1,46 @@
+{
+  "name": "gladys-pool-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "External Gladys Assistant integration for the Water-i.d. PoolLab 1.0 / 2.0 and PrimeLab water testers through the official LabCom cloud API: one device per pool (pH, chlorine, alkalinity, stabilizer…), ideal range scene triggers, dashboard widgets. Read only.",
+  "homepage": "https://github.com/William-De71/gladys-pool-lab",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/William-De71/gladys-pool-lab.git"
+  },
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@gladysassistant/integration-sdk": "^0.16.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "gladys-assistant",
+    "gladys-assistant-integration",
+    "poollab",
+    "primelab",
+    "labcom",
+    "water-id",
+    "pool",
+    "spa",
+    "water-quality",
+    "home-automation"
+  ]
+}
